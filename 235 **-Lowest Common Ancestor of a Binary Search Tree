@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(!isCovered(root, p)||!isCovered(root, q)){
+            return null;
+        }
+        return AncestorHelper(root, p, q);
+    }
+    public TreeNode AncestorHelper(TreeNode root, TreeNode p, TreeNode q){
+        if(root==null||root==p||root==q){
+            return root;
+        }
+        boolean pIsOnLeft = isCovered(root.left, p);
+        boolean qIsOnLeft = isCovered(root.left, q);
+        if(pIsOnLeft != qIsOnLeft){
+            return root;
+        }
+        TreeNode childSide = pIsOnLeft? root.left: root.right;
+        return AncestorHelper(childSide, p, q);
+    }
+    public boolean isCovered(TreeNode root, TreeNode node){
+        if(root==null){
+            return false;
+        }
+        if(root==node){
+            return true;
+        }
+        return isCovered(root.left, node)||isCovered(root.right, node);
+    }
+}
